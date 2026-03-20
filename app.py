@@ -12,9 +12,7 @@ import string
 import time
 import os
 import re
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import resend
 
 app = Flask(__name__)
 CORS(app)
@@ -106,144 +104,36 @@ def valid_email(email):
 # ─────────────────────────────────────────────
 
 def send_otp_email(to_email, to_name, otp):
-    """Send HTML OTP email via Gmail SMTP. Returns (ok, error_msg)."""
-
-    html = f"""<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:40px 16px;">
-  <tr><td align="center">
-    <table width="480" cellpadding="0" cellspacing="0"
-           style="background:#0f141a;border-radius:18px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;max-width:100%;">
-
-      <!-- Header bar -->
-      <tr>
-        <td style="background:linear-gradient(135deg,#0070ff,#00e5ff);padding:28px 36px;text-align:center;">
-          <div style="display:inline-flex;align-items:center;gap:10px;">
-            <div style="width:40px;height:40px;background:rgba(0,0,0,0.2);border-radius:12px;
-                        display:inline-flex;align-items:center;justify-content:center;">
-              <span style="font-size:20px;">💬</span>
-            </div>
-            <span style="color:#000;font-size:26px;font-weight:800;letter-spacing:-1px;">LinkUP</span>
-          </div>
-          <p style="margin:6px 0 0;color:rgba(0,0,0,0.55);font-size:11px;
-                    letter-spacing:2px;text-transform:uppercase;">Connect Instantly</p>
-        </td>
-      </tr>
-
-      <!-- Body -->
-      <tr>
-        <td style="padding:36px 36px 28px;">
-          <p style="margin:0 0 6px;color:#4a5a6a;font-size:12px;
-                    text-transform:uppercase;letter-spacing:1px;">Hello,</p>
-          <h2 style="margin:0 0 22px;color:#e8edf3;font-size:22px;font-weight:600;">
-            {to_name} 👋
-          </h2>
-          <p style="margin:0 0 26px;color:#5a6a7a;font-size:14px;line-height:1.8;">
-            You requested a login OTP for <strong style="color:#00e5ff;">LinkUP</strong>.<br>
-            Use the code below to verify your account:
-          </p>
-
-          <!-- OTP display -->
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:26px;">
-            <tr>
-              <td style="background:#161d26;border:2px solid rgba(0,229,255,0.3);
-                          border-radius:14px;padding:28px 20px;text-align:center;">
-                <p style="margin:0 0 8px;font-size:11px;color:#3a5060;
-                           letter-spacing:3px;text-transform:uppercase;">Your One-Time Password</p>
-                <p style="margin:0;font-size:46px;font-weight:800;letter-spacing:12px;
-                           color:#00e5ff;font-family:'Courier New',monospace;">{otp}</p>
-              </td>
-            </tr>
-          </table>
-
-          <!-- Info pills -->
-          <table width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-              <td style="background:#161d26;border-radius:10px;padding:13px 16px;margin-bottom:8px;">
-                <span style="font-size:13px;color:#5a6a7a;">
-                  ⏱ &nbsp;Expires in <strong style="color:#e8edf3;">5 minutes</strong>
-                </span>
-              </td>
-            </tr>
-            <tr><td style="height:8px;"></td></tr>
-            <tr>
-              <td style="background:#161d26;border-radius:10px;padding:13px 16px;">
-                <span style="font-size:13px;color:#5a6a7a;">
-                  🔒 &nbsp;Never share this code with anyone
-                </span>
-              </td>
-            </tr>
-          </table>
-
-          <p style="margin:24px 0 0;font-size:12px;color:#2e3d4d;line-height:1.7;">
-            If you did not request this, you can safely ignore this email.
-          </p>
-        </td>
-      </tr>
-
-      <!-- Footer -->
-      <tr>
-        <td style="border-top:1px solid rgba(255,255,255,0.05);
-                   padding:18px 36px;text-align:center;">
-          <p style="margin:0;font-size:11px;color:#2a3a4a;">
-            © 2024 LinkUP &nbsp;·&nbsp; Automated message — do not reply
-          </p>
-        </td>
-      </tr>
-
-    </table>
-  </td></tr>
-</table>
-</body>
-</html>"""
-
-    plain = f"""LinkUP – Your OTP
-
-Hello {to_name},
-
-Your one-time password is: {otp}
-
-It expires in 5 minutes. Do not share it with anyone.
-
-If you didn't request this, ignore this email.
-
-— LinkUP
-"""
-
+    """Send OTP email via Resend API."""
     try:
-        msg             = MIMEMultipart("alternative")
-        msg["Subject"]  = f"{otp} is your LinkUP login code"
-        msg["From"]     = f"{SENDER_NAME} <{SENDER_EMAIL}>"
-        msg["To"]       = to_email
-        msg["X-Priority"] = "1"
+        resend.api_key = os.environ.get("RESEND_API_KEY", "")
 
-        msg.attach(MIMEText(plain, "plain"))
-        msg.attach(MIMEText(html,  "html"))
+        html = f"""
+        <div style="background:#0f141a;padding:40px;font-family:sans-serif;border-radius:16px;">
+            <h1 style="color:#00e5ff;">LinkUP</h1>
+            <p style="color:#e8edf3;">Hello {to_name},</p>
+            <p style="color:#5a6a7a;">Your OTP for LinkUP login:</p>
+            <div style="background:#161d26;border:2px solid rgba(0,229,255,0.3);
+                        border-radius:12px;padding:24px;text-align:center;margin:20px 0;">
+                <p style="color:#3a5060;font-size:12px;margin:0;">YOUR ONE-TIME PASSWORD</p>
+                <p style="color:#00e5ff;font-size:40px;font-weight:800;
+                           letter-spacing:10px;margin:10px 0;font-family:monospace;">{otp}</p>
+            </div>
+            <p style="color:#5a6a7a;">Expires in <strong style="color:#e8edf3;">5 minutes</strong></p>
+            <p style="color:#5a6a7a;">Never share this code with anyone.</p>
+        </div>
+        """
 
-        pw = SENDER_PASSWORD.replace(" ", "")   # remove spaces from app password
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=15) as srv:
-            srv.ehlo()
-            srv.starttls()
-            srv.ehlo()
-            srv.login(SENDER_EMAIL, pw)
-            srv.sendmail(SENDER_EMAIL, to_email, msg.as_string())
+        params = {
+            "from": f"LinkUP <onboarding@resend.dev>",
+            "to": [to_email],
+            "subject": f"{otp} is your LinkUP login code",
+            "html": html,
+        }
 
+        resend.Emails.send(params)
         print(f"[EMAIL] OTP delivered → {to_email}")
         return True, None
-
-    except smtplib.SMTPAuthenticationError:
-        msg = ("Gmail authentication failed. "
-               "Check SENDER_EMAIL and SENDER_PASSWORD in app.py. "
-               "Make sure you're using a Gmail App Password, not your normal password.")
-        print(f"[EMAIL ERROR] {msg}")
-        return False, msg
-
-    except smtplib.SMTPRecipientsRefused:
-        msg = f"Email address {to_email} was rejected by Gmail."
-        print(f"[EMAIL ERROR] {msg}")
-        return False, msg
 
     except Exception as e:
         msg = f"Could not send email: {str(e)}"
