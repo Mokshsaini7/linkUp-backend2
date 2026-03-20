@@ -254,7 +254,7 @@ If you didn't request this, ignore this email.
 # SERVE FRONTEND
 # ─────────────────────────────────────────────
 
-FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
+FRONTEND_DIR = os.path.abspath(os.path.dirname(__file__))
 
 @app.route("/app/<path:filename>")
 def serve_frontend(filename):
