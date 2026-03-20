@@ -1,0 +1,5 @@
+# LinkUP Backend Dependencies
+# smtplib, email, re, sqlite3 are all Python built-ins — no extra install needed.
+
+flask==3.0.0
+flask-cors==4.0.0

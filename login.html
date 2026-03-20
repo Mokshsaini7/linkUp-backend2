@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <title>LinkUP – Login</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <div class="app-shell">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="logo-ring">
+        <div class="logo-inner">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path d="M6 16C6 10.477 10.477 6 16 6s10 4.477 10 10-4.477 10-10 10H6l4-4"
+                  stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="16" r="1.5" fill="#00e5ff"/>
+            <circle cx="16" cy="16" r="1.5" fill="#00e5ff"/>
+            <circle cx="20" cy="16" r="1.5" fill="#00e5ff"/>
+          </svg>
+        </div>
+      </div>
+      <h1 class="brand-name">LinkUP</h1>
+      <p class="brand-tagline">Connect Instantly</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card" id="loginCard">
+
+      <!-- ── STEP 1: Name + Email ── -->
+      <div class="step" id="step1">
+        <h2 class="step-title">Welcome</h2>
+        <p class="step-sub">Enter your details to receive an OTP</p>
+
+        <!-- Name -->
+        <div class="input-group">
+          <label class="input-label">Your Name</label>
+          <div class="input-wrap" id="nameWrap">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <input type="text" id="nameInput" class="input-field"
+                   placeholder="John Doe" autocomplete="name"
+                   onfocus="focusWrap('nameWrap')" onblur="blurWrap('nameWrap')" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="input-group">
+          <label class="input-label">Email Address</label>
+          <div class="input-wrap" id="emailWrap">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m2 7 10 7 10-7"/>
+              </svg>
+            </span>
+            <input type="email" id="emailInput" class="input-field"
+                   placeholder="you@example.com"
+                   autocomplete="email" inputmode="email"
+                   onfocus="focusWrap('emailWrap')" onblur="blurWrap('emailWrap')" />
+          </div>
+          <span class="input-hint">OTP will be sent to this email</span>
+        </div>
+
+        <button class="btn-primary" id="sendOtpBtn" onclick="sendOTP()">
+          <span class="btn-text">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;margin-right:6px;">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m2 7 10 7 10-7"/>
+            </svg>
+            Send OTP to Email
+          </span>
+          <span class="btn-loader hidden">
+            <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83
+                       M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </span>
+        </button>
+
+        <div class="msg-box hidden" id="step1Msg"></div>
+      </div>
+
+      <!-- ── STEP 2: OTP Entry ── -->
+      <div class="step hidden" id="step2">
+
+        <button class="back-btn" onclick="goBack()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+        </button>
+
+        <h2 class="step-title">Check your email</h2>
+
+        <!-- Email sent-to badge -->
+        <div class="email-badge" id="emailBadge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="#00e5ff" stroke-width="2" style="flex-shrink:0">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m2 7 10 7 10-7"/>
+          </svg>
+          <span id="emailSentTo">---</span>
+        </div>
+
+        <p class="step-sub" style="margin-top:-6px;">
+          Enter the 6-digit code we just sent you
+        </p>
+
+        <!-- 6 OTP boxes -->
+        <div class="otp-inputs">
+          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o1"/>
+          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o2"/>
+          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o3"/>
+          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o4"/>
+          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o5"/>
+          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o6"/>
+        </div>
+
+        <button class="btn-primary" id="verifyBtn" onclick="verifyOTP()">
+          <span class="btn-text">Verify &amp; Login</span>
+          <span class="btn-loader hidden">
+            <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83
+                       M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </span>
+        </button>
+
+        <div class="resend-row">
+          <span class="resend-text">Didn't receive it?</span>
+          <button class="resend-btn" id="resendBtn" onclick="resendOTP()" disabled>
+            Resend&nbsp;<span id="resendTimer">(60s)</span>
+          </button>
+        </div>
+
+        <!-- Spam note -->
+        <div class="spam-note">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" style="flex-shrink:0;opacity:0.5">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4M12 16h.01"/>
+          </svg>
+          <span>Check your spam / junk folder if you don't see it</span>
+        </div>
+
+        <div class="msg-box hidden" id="step2Msg"></div>
+      </div>
+
+    </div>
+
+    <p class="footer-note">Made by Moksh Saini</p>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

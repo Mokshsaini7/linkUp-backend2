@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#080c10" />
+  <title>LinkUP – Chats</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+<!-- ──────────────────────────────
+     USERS LIST PANEL
+─────────────────────────────── -->
+<div class="panel panel-users" id="panelUsers">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="app-avatar">
+        <svg width="18" height="18" viewBox="0 0 32 32" fill="none">
+          <path d="M6 16C6 10.477 10.477 6 16 6s10 4.477 10 10-4.477 10-10 10H6l4-4" stroke="#00e5ff" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="12" cy="16" r="1.5" fill="#00e5ff"/>
+          <circle cx="16" cy="16" r="1.5" fill="#00e5ff"/>
+          <circle cx="20" cy="16" r="1.5" fill="#00e5ff"/>
+        </svg>
+      </div>
+      <span class="app-name">LinkUP</span>
+    </div>
+    <div class="topbar-right">
+      <div class="user-status-dot" id="myStatusDot"></div>
+      <button class="icon-btn" onclick="logout()" title="Logout">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- My Profile Row -->
+  <div class="my-profile">
+    <div class="avatar" id="myAvatar">?</div>
+    <div class="profile-info">
+      <span class="profile-name" id="myName">Loading...</span>
+      <span class="profile-phone" id="myPhone">---@---.com</span>
+    </div>
+    <span class="online-badge">Online</span>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="Search contacts..." oninput="filterUsers()" />
+  </div>
+
+  <!-- Users List -->
+  <div class="section-label">CONTACTS</div>
+  <div class="users-list" id="usersList">
+    <div class="empty-state" id="usersEmpty">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <p>No contacts yet</p>
+      <span>Invite friends to join LinkUP</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ──────────────────────────────
+     CHAT PANEL
+─────────────────────────────── -->
+<div class="panel panel-chat hidden" id="panelChat">
+
+  <!-- Chat Header -->
+  <header class="chat-header">
+    <button class="icon-btn back-icon" onclick="backToUsers()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </button>
+    <div class="chat-avatar" id="chatAvatar">?</div>
+    <div class="chat-header-info">
+      <span class="chat-name" id="chatName">--</span>
+      <span class="chat-status" id="chatStatus">
+        <span class="status-dot"></span> Online
+      </span>
+    </div>
+    <div class="chat-actions">
+      <button class="icon-btn" title="More options">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Messages Area -->
+  <div class="messages-area" id="messagesArea">
+    <div class="date-divider">Today</div>
+    <!-- Messages injected by JS -->
+    <div id="messagesList"></div>
+
+    <!-- Typing indicator -->
+    <div class="typing-indicator hidden" id="typingIndicator">
+      <div class="typing-bubble">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Input Bar -->
+  <div class="input-bar">
+    <div class="input-wrap">
+      <button class="icon-btn emoji-btn" title="Emoji">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+        </svg>
+      </button>
+      <textarea
+        id="msgInput"
+        class="msg-input"
+        placeholder="Type a message..."
+        rows="1"
+        oninput="autoResize(this)"
+        onkeydown="handleMsgKey(event)"
+      ></textarea>
+    </div>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+
+</div>
+
+<!-- ──────────────────────────────
+     EMPTY CHAT STATE (no chat selected)
+─────────────────────────────── -->
+<div class="panel panel-empty" id="panelEmpty">
+  <div class="empty-chat-state">
+    <div class="empty-icon">
+      <svg width="56" height="56" viewBox="0 0 32 32" fill="none">
+        <path d="M6 16C6 10.477 10.477 6 16 6s10 4.477 10 10-4.477 10-10 10H6l4-4" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="16" cy="16" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="20" cy="16" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      </svg>
+    </div>
+    <h3>Select a contact</h3>
+    <p>Choose from your contacts to start chatting</p>
+  </div>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
