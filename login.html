@@ -20,7 +20,7 @@
         <div class="logo-inner">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <path d="M6 16C6 10.477 10.477 6 16 6s10 4.477 10 10-4.477 10-10 10H6l4-4"
-                  stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  stroke="#00e5ff" stroke-width="2" stroke-linecap="round"/>
             <circle cx="12" cy="16" r="1.5" fill="#00e5ff"/>
             <circle cx="16" cy="16" r="1.5" fill="#00e5ff"/>
             <circle cx="20" cy="16" r="1.5" fill="#00e5ff"/>
@@ -31,139 +31,170 @@
       <p class="brand-tagline">Connect Instantly</p>
     </div>
 
-    <!-- Login Card -->
-    <div class="card" id="loginCard">
+    <!-- Toggle Tabs -->
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="loginTab" onclick="showLogin()">Login</button>
+      <button class="tab-btn" id="registerTab" onclick="showRegister()">Register</button>
+    </div>
 
-      <!-- ── STEP 1: Name + Email ── -->
-      <div class="step" id="step1">
-        <h2 class="step-title">Welcome</h2>
-        <p class="step-sub">Enter your details to receive an OTP</p>
+    <!-- Card -->
+    <div class="card">
 
-        <!-- Name -->
+      <!-- ── LOGIN FORM ── -->
+      <div class="step" id="loginForm">
+        <h2 class="step-title">Welcome Back</h2>
+        <p class="step-sub">Login to your account</p>
+
         <div class="input-group">
-          <label class="input-label">Your Name</label>
-          <div class="input-wrap" id="nameWrap">
+          <label class="input-label">Username</label>
+          <div class="input-wrap" id="loginUsernameWrap">
             <span class="input-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                 <circle cx="12" cy="7" r="4"/>
               </svg>
             </span>
-            <input type="text" id="nameInput" class="input-field"
-                   placeholder="John Doe" autocomplete="name"
-                   onfocus="focusWrap('nameWrap')" onblur="blurWrap('nameWrap')" />
+            <input type="text" id="loginUsername" class="input-field"
+                   placeholder="moksh123" autocomplete="username"
+                   onfocus="focusWrap('loginUsernameWrap')"
+                   onblur="blurWrap('loginUsernameWrap')" />
           </div>
         </div>
 
-        <!-- Email -->
         <div class="input-group">
-          <label class="input-label">Email Address</label>
-          <div class="input-wrap" id="emailWrap">
+          <label class="input-label">Password</label>
+          <div class="input-wrap" id="loginPasswordWrap">
             <span class="input-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2">
-                <rect x="2" y="4" width="20" height="16" rx="2"/>
-                <path d="m2 7 10 7 10-7"/>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
             </span>
-            <input type="email" id="emailInput" class="input-field"
-                   placeholder="you@example.com"
-                   autocomplete="email" inputmode="email"
-                   onfocus="focusWrap('emailWrap')" onblur="blurWrap('emailWrap')" />
+            <input type="password" id="loginPassword" class="input-field"
+                   placeholder="••••••••" autocomplete="current-password"
+                   onfocus="focusWrap('loginPasswordWrap')"
+                   onblur="blurWrap('loginPasswordWrap')"
+                   onkeydown="if(event.key==='Enter') loginUser()" />
+            <button class="eye-btn" onclick="togglePass('loginPassword', this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
           </div>
-          <span class="input-hint">OTP will be sent to this email</span>
         </div>
 
-        <button class="btn-primary" id="sendOtpBtn" onclick="sendOTP()">
-          <span class="btn-text">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;margin-right:6px;">
-              <rect x="2" y="4" width="20" height="16" rx="2"/>
-              <path d="m2 7 10 7 10-7"/>
-            </svg>
-            Send OTP to Email
-          </span>
+        <button class="btn-primary" id="loginBtn" onclick="loginUser()">
+          <span class="btn-text">Login</span>
           <span class="btn-loader hidden">
-            <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2.5">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83
-                       M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
             </svg>
           </span>
         </button>
 
-        <div class="msg-box hidden" id="step1Msg"></div>
+        <div class="msg-box hidden" id="loginMsg"></div>
+
+        <p class="switch-text">
+          Naya account?
+          <button class="switch-btn" onclick="showRegister()">Register karo</button>
+        </p>
       </div>
 
-      <!-- ── STEP 2: OTP Entry ── -->
-      <div class="step hidden" id="step2">
+      <!-- ── REGISTER FORM ── -->
+      <div class="step hidden" id="registerForm">
+        <h2 class="step-title">Create Account</h2>
+        <p class="step-sub">Join LinkUP today</p>
 
-        <button class="back-btn" onclick="goBack()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2">
-            <path d="M19 12H5M12 5l-7 7 7 7"/>
-          </svg>
-        </button>
-
-        <h2 class="step-title">Check your email</h2>
-
-        <!-- Email sent-to badge -->
-        <div class="email-badge" id="emailBadge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-               stroke="#00e5ff" stroke-width="2" style="flex-shrink:0">
-            <rect x="2" y="4" width="20" height="16" rx="2"/>
-            <path d="m2 7 10 7 10-7"/>
-          </svg>
-          <span id="emailSentTo">---</span>
+        <div class="input-group">
+          <label class="input-label">Full Name</label>
+          <div class="input-wrap" id="regNameWrap">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <input type="text" id="regName" class="input-field"
+                   placeholder="Moksh Saini" autocomplete="name"
+                   onfocus="focusWrap('regNameWrap')"
+                   onblur="blurWrap('regNameWrap')" />
+          </div>
         </div>
 
-        <p class="step-sub" style="margin-top:-6px;">
-          Enter the 6-digit code we just sent you
-        </p>
-
-        <!-- 6 OTP boxes -->
-        <div class="otp-inputs">
-          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o1"/>
-          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o2"/>
-          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o3"/>
-          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o4"/>
-          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o5"/>
-          <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" id="o6"/>
+        <div class="input-group">
+          <label class="input-label">Username</label>
+          <div class="input-wrap" id="regUsernameWrap">
+            <span class="input-icon" style="color:#00e5ff;font-size:16px;font-weight:700;padding:0 14px;">@</span>
+            <input type="text" id="regUsername" class="input-field"
+                   placeholder="moksh123" autocomplete="username"
+                   onfocus="focusWrap('regUsernameWrap')"
+                   onblur="blurWrap('regUsernameWrap')" />
+          </div>
+          <span class="input-hint">Min 3 characters, letters/numbers/underscore only</span>
         </div>
 
-        <button class="btn-primary" id="verifyBtn" onclick="verifyOTP()">
-          <span class="btn-text">Verify &amp; Login</span>
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <div class="input-wrap" id="regPasswordWrap">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <input type="password" id="regPassword" class="input-field"
+                   placeholder="••••••••" autocomplete="new-password"
+                   onfocus="focusWrap('regPasswordWrap')"
+                   onblur="blurWrap('regPasswordWrap')" />
+            <button class="eye-btn" onclick="togglePass('regPassword', this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <span class="input-hint">Min 6 characters</span>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Confirm Password</label>
+          <div class="input-wrap" id="regConfirmWrap">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </span>
+            <input type="password" id="regConfirm" class="input-field"
+                   placeholder="••••••••" autocomplete="new-password"
+                   onfocus="focusWrap('regConfirmWrap')"
+                   onblur="blurWrap('regConfirmWrap')"
+                   onkeydown="if(event.key==='Enter') registerUser()" />
+          </div>
+        </div>
+
+        <button class="btn-primary" id="registerBtn" onclick="registerUser()">
+          <span class="btn-text">Create Account</span>
           <span class="btn-loader hidden">
-            <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2.5">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83
-                       M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
             </svg>
           </span>
         </button>
 
-        <div class="resend-row">
-          <span class="resend-text">Didn't receive it?</span>
-          <button class="resend-btn" id="resendBtn" onclick="resendOTP()" disabled>
-            Resend&nbsp;<span id="resendTimer">(60s)</span>
-          </button>
-        </div>
+        <div class="msg-box hidden" id="registerMsg"></div>
 
-        <!-- Spam note -->
-        <div class="spam-note">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2" style="flex-shrink:0;opacity:0.5">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 8v4M12 16h.01"/>
-          </svg>
-          <span>Check your spam / junk folder if you don't see it</span>
-        </div>
-
-        <div class="msg-box hidden" id="step2Msg"></div>
+        <p class="switch-text">
+          Already account hai?
+          <button class="switch-btn" onclick="showLogin()">Login karo</button>
+        </p>
       </div>
 
     </div>
+
+    <p class="footer-note">By continuing you agree to our Terms of Use</p>
+  </div>
 
     <p class="footer-note">Made by Moksh Saini</p>
   </div>
