@@ -4,7 +4,7 @@
  */
 
 // ─── CONFIG ───────────────────────────────
-const BASE_URL = "https://linkup-backend2-production.up.railway.app"; // Change for real device
+const BASE_URL = "https://linkup-backend2.onrender.com/"; // Change for real device
 
 let currentUser = null;       // Logged-in user object
 let activeChat = null;        // User being chatted with
