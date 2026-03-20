@@ -33,8 +33,8 @@ CORS(app)
 # ⚠️  Use the APP PASSWORD, NOT your real Gmail password.
 # ─────────────────────────────────────────────
 
-SENDER_EMAIL    = "teamlinkup07@gmail.com"      # ← your Gmail here
-SENDER_PASSWORD = "jate xjxe szbh ilky"       # ← 16-char App Password here
+SENDER_EMAIL    = os.environ.get("SENDER_EMAIL", "teamlinkup07@gmail.com")
+SENDER_PASSWORD = os.environ.get("SENDER_PASSWORD", "jate xjxe szbh ilky")    
 SENDER_NAME     = "LinkUP"
 
 # ─────────────────────────────────────────────
