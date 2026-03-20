@@ -4,7 +4,7 @@
  */
 
 // ─── CONFIG ───────────────────────────────
-const BASE_URL = "https://linkup-backend2.onrender.com/"; // Change for real device
+const BASE_URL = "https://linkup-backend2.onrender.com"; // Change for real device
 
 let currentUser = null;       // Logged-in user object
 let activeChat = null;        // User being chatted with
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Populate my profile
   document.getElementById("myName").textContent = currentUser.name;
-  document.getElementById("myPhone").textContent = currentUser.email;
+  document.getElementById("myPhone").textContent = "@" + currentUser.username;
   document.getElementById("myAvatar").textContent = getInitial(currentUser.name);
 
   // Set online status
@@ -69,7 +69,7 @@ async function setOnlineStatus(online) {
     await fetch(`${BASE_URL}/set-online`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: currentUser.email, is_online: online ? 1 : 0 })
+      body: JSON.stringify({ username: currentUser.username, is_online: online ? 1 : 0 })
     });
   } catch (e) { /* silently fail */ }
 }
@@ -78,7 +78,7 @@ async function setOnlineStatus(online) {
 
 async function loadUsers() {
   try {
-    const res = await fetch(`${BASE_URL}/users?email=${currentUser.email}`);
+    const res = await fetch(`${BASE_URL}/users?username=${currentUser.username}`);
     const data = await res.json();
 
     if (data.success) {
@@ -94,7 +94,7 @@ function filterUsers() {
   const query = document.getElementById("searchInput").value.toLowerCase();
   const filtered = allUsers.filter(u =>
     u.name.toLowerCase().includes(query) ||
-    u.email.includes(query)
+    u.username.includes(query)
   );
   renderUsers(filtered);
 }
@@ -114,7 +114,7 @@ function renderUsers(users) {
 
   users.forEach(user => {
     const div = document.createElement("div");
-    div.className = `user-item${activeChat && activeChat.email === user.email ? " active" : ""}`;
+    div.className = `user-item${activeChat && activeChat.username === user.username ? " active" : ""}`;
     div.onclick = () => openChat(user);
 
     div.innerHTML = `
@@ -123,7 +123,7 @@ function renderUsers(users) {
       </div>
       <div class="user-item-info">
         <span class="user-item-name">${escapeHtml(user.name)}</span>
-        <span class="user-item-preview">${escapeHtml(user.email)}</span>
+        <span class="user-item-preview">${escapeHtml(user.username)}</span>
       </div>
       <div class="user-item-meta">
         <span class="user-item-time">${user.is_online ? "Online" : formatTime(user.last_seen)}</span>
@@ -186,7 +186,7 @@ async function loadMessages(initial = false) {
   if (!activeChat) return;
 
   try {
-    const url = `${BASE_URL}/get-messages?sender=${currentUser.email}&receiver=${activeChat.email}&since_id=${lastMsgId}`;
+    const url = `${BASE_URL}/get-messages?sender=${currentUser.username}&receiver=${activeChat.username}&since_id=${lastMsgId}`;
     const res = await fetch(url);
     const data = await res.json();
 
@@ -208,7 +208,7 @@ function appendMessages(messages, initial) {
   const wasAtBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 60;
 
   messages.forEach(msg => {
-    const isSent = msg.sender_email === currentUser.email;
+    const isSent = msg.sender_username === currentUser.username;
 
     const wrapper = document.createElement("div");
     wrapper.className = `msg-wrapper ${isSent ? "sent" : "recv"}`;
@@ -252,8 +252,8 @@ async function sendMessage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        sender_email: currentUser.email,
-        receiver_email: activeChat.email,
+        sender_username: currentUser.username,
+        receiver_username: activeChat.username,
         message: text
       })
     });
