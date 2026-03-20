@@ -1,6 +1,5 @@
 /* ─────────────────────────────────────────
-   LinkUP – Login Screen CSS
-   Dark, app-native mobile-first UI
+   LinkUP – Login CSS (Username/Password)
 ───────────────────────────────────────── */
 
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
@@ -31,7 +30,7 @@
 
 html, body {
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
   background: var(--bg);
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
@@ -48,6 +47,7 @@ html, body {
     linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
+  z-index: 0;
 }
 
 .bg-glow {
@@ -60,19 +60,19 @@ html, body {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(0,112,255,0.12) 0%, transparent 70%);
   pointer-events: none;
+  z-index: 0;
 }
 
 /* ── App Shell ── */
 .app-shell {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100dvh;
   padding: 24px 20px 32px;
-  gap: 28px;
-  overflow-y: auto;
+  gap: 20px;
 }
 
 /* ── Brand ── */
@@ -85,36 +85,32 @@ html, body {
 }
 
 .logo-ring {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   border: 2px solid rgba(0,229,255,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   background: radial-gradient(circle, rgba(0,229,255,0.08), transparent);
-  box-shadow: 0 0 30px rgba(0,229,255,0.15), inset 0 0 20px rgba(0,229,255,0.05);
+  box-shadow: 0 0 30px rgba(0,229,255,0.15);
 }
 
 .logo-ring::before {
   content: '';
   position: absolute;
-  inset: -4px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   border: 1px solid rgba(0,229,255,0.1);
   animation: ringPulse 2.5s ease-in-out infinite;
 }
 
-.logo-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.logo-inner { display: flex; align-items: center; justify-content: center; }
 
 .brand-name {
   font-family: 'Syne', sans-serif;
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 800;
   letter-spacing: -1px;
   background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
@@ -124,11 +120,42 @@ html, body {
 }
 
 .brand-tagline {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  font-weight: 400;
+}
+
+/* ── Auth Tabs ── */
+.auth-tabs {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  width: 100%;
+  max-width: 420px;
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #000;
 }
 
 /* ── Card ── */
@@ -138,10 +165,8 @@ html, body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 24px;
-  padding: 32px 28px;
-  box-shadow:
-    0 32px 64px rgba(0,0,0,0.5),
-    0 0 0 1px rgba(255,255,255,0.04) inset;
+  padding: 28px 24px;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.5);
   animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
   position: relative;
   overflow: hidden;
@@ -157,32 +182,28 @@ html, body {
 }
 
 /* ── Steps ── */
-.step { display: flex; flex-direction: column; gap: 20px; }
+.step { display: flex; flex-direction: column; gap: 16px; }
 .step.hidden { display: none; }
 
 .step-title {
   font-family: 'Syne', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.5px;
 }
 
 .step-sub {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-muted);
-  margin-top: -12px;
+  margin-top: -8px;
 }
 
 /* ── Input Groups ── */
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+.input-group { display: flex; flex-direction: column; gap: 6px; }
 
 .input-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--text-muted);
   letter-spacing: 0.5px;
@@ -199,11 +220,6 @@ html, body {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.input-wrap:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
 .input-icon {
   display: flex;
   align-items: center;
@@ -213,189 +229,68 @@ html, body {
   flex-shrink: 0;
 }
 
-.dial-code {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--accent);
-  border-right: 1px solid var(--border);
-  padding: 0 14px;
-  min-width: 52px;
-}
-
 .input-field {
   flex: 1;
   background: transparent;
   border: none;
   outline: none;
-  padding: 14px 16px 14px 4px;
-  font-size: 15px;
+  padding: 13px 12px 13px 0;
+  font-size: 14px;
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
   min-width: 0;
 }
 
-.phone-field { padding-left: 14px; }
-
 .input-field::placeholder { color: var(--text-dim); }
 
-.input-hint {
-  font-size: 11px;
-  color: var(--text-dim);
+.input-hint { font-size: 11px; color: var(--text-dim); }
+
+/* ── Eye Button ── */
+.eye-btn {
+  background: transparent;
+  border: none;
+  padding: 0 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+  transition: opacity 0.2s;
 }
 
-/* ── Buttons ── */
+.eye-btn:active { opacity: 1; }
+
+/* ── Primary Button ── */
 .btn-primary {
   width: 100%;
-  padding: 15px;
+  padding: 14px;
   border: none;
   border-radius: var(--radius-sm);
   background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
   color: #000;
   font-family: 'Syne', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.3px;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   transition: opacity 0.2s, transform 0.15s;
   box-shadow: 0 8px 24px rgba(0,112,255,0.3);
-  -webkit-tap-highlight-color: transparent;
+  margin-top: 4px;
 }
 
 .btn-primary:active { transform: scale(0.97); opacity: 0.9; }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-.btn-primary::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(rgba(255,255,255,0.15), transparent);
-  pointer-events: none;
-}
-
-/* ── Loader Spinner ── */
-.spin {
-  animation: rotate 0.8s linear infinite;
-}
-
+/* ── Loader ── */
+.spin { animation: rotate 0.8s linear infinite; }
 .hidden { display: none !important; }
-
-/* ── Back Button ── */
-.back-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
-  background: var(--surface2);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.back-btn:active { transform: scale(0.93); }
-
-/* ── Email Sent-To Badge ── */
-.email-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  background: rgba(0,229,255,0.06);
-  border: 1px solid rgba(0,229,255,0.2);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  color: var(--accent);
-  font-weight: 500;
-  word-break: break-all;
-}
-
-/* ── Spam Note ── */
-.spam-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-  padding: 10px 14px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  color: var(--text-dim);
-  line-height: 1.5;
-}
-
-/* ── OTP Inputs ── */
-.otp-inputs {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.otp-box {
-  flex: 1;
-  max-width: 48px;
-  aspect-ratio: 1;
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  text-align: center;
-  font-family: 'Syne', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.otp-box:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-  transform: scale(1.05);
-}
-
-.otp-box.filled {
-  border-color: rgba(0,229,255,0.4);
-  background: rgba(0,229,255,0.06);
-}
-
-/* ── Resend Row ── */
-.resend-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.resend-text {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.resend-btn {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accent);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  opacity: 0.5;
-  transition: opacity 0.2s;
-}
-
-.resend-btn:not(:disabled) { opacity: 1; }
 
 /* ── Message Box ── */
 .msg-box {
-  padding: 12px 16px;
+  padding: 11px 14px;
   border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
@@ -414,12 +309,28 @@ html, body {
   color: var(--error);
 }
 
+/* ── Switch Text ── */
+.switch-text {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.switch-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
 /* ── Footer ── */
 .footer-note {
   font-size: 11px;
   color: var(--text-dim);
   text-align: center;
-  animation: fadeIn 1s ease 0.5s both;
 }
 
 /* ── Animations ── */
@@ -446,14 +357,4 @@ html, body {
 @keyframes ringPulse {
   0%, 100% { transform: scale(1); opacity: 0.5; }
   50%       { transform: scale(1.12); opacity: 0.2; }
-}
-
-/* ── Step Transition ── */
-.step.slide-in {
-  animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes slideUpFade {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
 }
