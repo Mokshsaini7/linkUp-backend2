@@ -8,7 +8,8 @@
 //   Android Emulator : http://10.0.2.2:5000
 //   Real Device      : http://192.168.x.x:5000   (your PC's local IP)
 //   Browser testing  : http://localhost:5000
-const BASE_URL = "linkup-backend2-production.up.railway.app";
+const BASE_URL = "https://linkup-backend2-production.up.railway.app";
+
 
 let resendInterval = null;
 let resendSeconds  = 60;   // 60-second cooldown before resend is allowed
