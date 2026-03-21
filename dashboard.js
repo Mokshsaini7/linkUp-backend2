@@ -209,14 +209,17 @@ function openChat(user) {
 }
 
 // ─── BACK TO USERS ────────────────────────
-
 function backToUsers() {
   clearInterval(pollInterval);
   activeChat = null;
 
-  document.getElementById("panelUsers").classList.remove("hidden");
-  document.getElementById("panelChat").classList.add("hidden");
-  document.getElementById("panelEmpty").classList.remove("hidden");
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    document.getElementById("panelUsers").classList.remove("hidden");
+    document.getElementById("panelChat").classList.add("hidden");
+    document.getElementById("panelEmpty").classList.add("hidden");
+  }
+  renderUsers(allUsers);
 }
 
 // ─── LOAD MESSAGES ────────────────────────
