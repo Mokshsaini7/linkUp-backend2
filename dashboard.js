@@ -150,6 +150,45 @@ function openChat(user) {
   // Clear messages
   document.getElementById("messagesList").innerHTML = "";
 
+  // ── MOBILE: hide users panel, show chat panel
+  // ── PC: both panels visible, just hide empty state
+  const isMobile = window.innerWidth < 768;
+
+  if (isMobile) {
+    document.getElementById("panelUsers").classList.add("hidden");
+    document.getElementById("panelChat").classList.remove("hidden");
+  } else {
+    // PC mode — show chat, hide empty panel
+    document.getElementById("panelChat").classList.remove("hidden");
+    document.getElementById("panelEmpty").classList.add("hidden");
+    // Make sure users panel stays visible on PC
+    document.getElementById("panelUsers").classList.remove("hidden");
+  }
+
+  // Highlight active user in list
+  renderUsers(allUsers);
+
+  // Load initial messages
+  loadMessages(true);
+
+  // Start polling every 2 seconds
+  clearInterval(pollInterval);
+  pollInterval = setInterval(() => loadMessages(false), 2000);
+
+  // Focus input
+  setTimeout(() => document.getElementById("msgInput").focus(), 200);
+}
+
+  // Update chat header
+  document.getElementById("chatAvatar").textContent = getInitial(user.name);
+  document.getElementById("chatName").textContent = user.name;
+  document.getElementById("chatStatus").innerHTML = user.is_online
+    ? `<span class="status-dot"></span> Online`
+    : `<span class="status-dot" style="background:#5a6a7a"></span> Offline`;
+
+  // Clear messages
+  document.getElementById("messagesList").innerHTML = "";
+
   // Show chat panel (mobile: hide users, show chat)
   document.getElementById("panelUsers").classList.add("hidden");
   document.getElementById("panelChat").classList.remove("hidden");
