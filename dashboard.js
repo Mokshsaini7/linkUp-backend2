@@ -75,20 +75,23 @@ async function setOnlineStatus(online) {
 }
 
 // ─── LOAD USERS ───────────────────────────
+// Load users
+  loadUsers();
 
-async function loadUsers() {
-  try {
-    const res = await fetch(`${BASE_URL}/users?username=${currentUser.username}`);
-    const data = await res.json();
-
-    if (data.success) {
-      allUsers = data.users;
-      renderUsers(allUsers);
-    }
-  } catch (err) {
-    console.error("Failed to load users:", err);
+  // ← YAHAN PASTE KARO (loadUsers ke bilkul baad)
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    document.getElementById("panelUsers").classList.remove("hidden");
+    document.getElementById("panelChat").classList.add("hidden");
+    document.getElementById("panelEmpty").classList.add("hidden");
+  } else {
+    document.getElementById("panelUsers").classList.remove("hidden");
+    document.getElementById("panelEmpty").classList.remove("hidden");
+    document.getElementById("panelChat").classList.add("hidden");
   }
-}
+
+  // Refresh users list every 10 seconds  ← YEH LINE BAAD MEIN AAYEGI
+  usersInterval = setInterval(loadUsers, 10000);
 
 function filterUsers() {
   const query = document.getElementById("searchInput").value.toLowerCase();
