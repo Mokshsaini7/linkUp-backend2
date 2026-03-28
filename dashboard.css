@@ -641,11 +641,11 @@ html, body {
   }
 
   .panel-chat {
-    position: fixed;
-    left: 340px; top: 0; right: 0; bottom: 0;
-    transform: none !important;
-    opacity: 1 !important;
-    pointer-events: all !important;
+  position: fixed;
+  left: 340px; top: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   }
 
   .panel-empty {
