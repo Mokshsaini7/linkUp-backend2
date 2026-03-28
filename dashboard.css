@@ -423,8 +423,18 @@ html, body {
   animation: msgAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.msg-wrapper.sent { align-self: flex-end; align-items: flex-end; }
-.msg-wrapper.recv { align-self: flex-start; align-items: flex-start; }
+.msg-wrapper.sent { 
+  align-self: flex-end; 
+  align-items: flex-end;
+  margin-left: auto;
+  margin-right: 0;
+}
+.msg-wrapper.recv { 
+  align-self: flex-start; 
+  align-items: flex-start;
+  margin-right: auto;
+  margin-left: 0;
+}
 
 .msg-bubble {
   padding: 10px 14px;
