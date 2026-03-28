@@ -421,19 +421,21 @@ html, body {
   flex-direction: column;
   max-width: 78%;
   animation: msgAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  width: fit-content;
 }
 
-.msg-wrapper.sent { 
-  align-self: flex-end; 
+.msg-wrapper.sent {
+  align-self: flex-end;
   align-items: flex-end;
   margin-left: auto;
   margin-right: 0;
 }
-.msg-wrapper.recv { 
-  align-self: flex-start; 
+
+.msg-wrapper.recv {
+  align-self: flex-start;
   align-items: flex-start;
-  margin-right: auto;
   margin-left: 0;
+  margin-right: auto;
 }
 
 .msg-bubble {
