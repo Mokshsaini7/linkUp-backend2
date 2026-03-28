@@ -346,7 +346,6 @@ html, body {
   flex-shrink: 0;
   z-index: 10;
 }
-
 .back-icon { border: none; background: transparent; }
 
 .chat-avatar {
